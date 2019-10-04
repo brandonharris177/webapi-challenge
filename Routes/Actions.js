@@ -15,7 +15,7 @@ actions.get('/', (req, res) => {
 });
   
 actions.get('/:id', validateActionId, (req, res) => {
-    console.log(`this  is running`)
+    // console.log(`this  is running`)
     actionDB.get(req.params.id).then(action => {
             res.status(200).json(action)
     }).catch(error =>

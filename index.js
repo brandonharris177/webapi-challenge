@@ -13,6 +13,7 @@ I need this code, just don't know where, perhaps should make some middleware, do
 Go code!
 */
 
+require('dotenv').config()
 const express = require('express');
 const helmet = require('helmet')
 const defaults = require('./config/default')
@@ -27,8 +28,6 @@ server.use(express.json());
 server.use(helmet())
 server.use('/api/projects', projects);
 server.use('/api/actions', actions);
-
-port = 5000
   
 // watch for connections on port 5000
 server.listen(defaults.port, () => {
@@ -37,5 +36,5 @@ server.listen(defaults.port, () => {
   
 
 server.get('/', (req, res) => {
-    res.send('Its working from index');
+    res.send('Welcome to the projects API');
   });

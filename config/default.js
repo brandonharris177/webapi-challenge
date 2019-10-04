@@ -1,3 +1,5 @@
 module.exports = {
-    port: process.env.PORT || 5000,
+    enviornment: process.env.NODE_ENV || 'development',
+    enviornmentTest: process.env.NODE_ENV,
+    port: process.env.PORT || 8000,
 }
