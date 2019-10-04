@@ -14,6 +14,7 @@ Go code!
 */
 
 const express = require('express');
+const helmet = require('helmet')
 
 const projects = require('./Routes/Projects')
 const actions = require('./Routes/Actions')
@@ -22,6 +23,7 @@ const server = express();
 
 server.use(express.json());
 
+server.use(helmet())
 server.use('/api/projects', projects);
 server.use('/api/actions', actions);
 
