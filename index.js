@@ -16,12 +16,14 @@ Go code!
 const express = require('express');
 
 const projects = require('./Routes/Projects')
+const actions = require('./Routes/Actions')
 
 const server = express();
 
 server.use(express.json());
 
 server.use('/api/projects', projects);
+server.use('/api/actions', actions);
 
 port = 5000
   

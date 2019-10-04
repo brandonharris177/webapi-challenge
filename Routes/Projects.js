@@ -4,15 +4,6 @@ const projectDB = require('../data/helpers/projectModel');
 
 const projects = express.Router();
 
-projects.post('/', validateProject, (req, res) => {
-    projectDB.insert(req.body)
-    .then(newProject =>
-        res.status(201).json(newProject)
-    ).catch(error =>
-        res.status(500).json({error: `Server error could not create project. Error: ${error}`})
-    )
-});
-
 projects.get('/', (req, res) => {
     projectDB.get()
     .then(projects => {
@@ -41,6 +32,29 @@ projects.get('/:id/actions', validateProjectId, (req, res) => {
     )
 });
 
+projects.post('/', validateProject, (req, res) => {
+    projectDB.insert(req.body)
+    .then(newProject =>
+        res.status(201).json(newProject)
+    ).catch(error =>
+        res.status(500).json({error: `Server error could not create project. Error: ${error}`})
+    )
+});
+
+projects.put('/:id', validateProjectId, (req, res) => {
+    const id = req.params.id
+    projectDB.update(id, req.body)
+    .then (updatedProject => {
+        if (updatedProject) {
+            res.status(200).json(updatedProject)
+        } else {
+            res.status(500).json({error: 'error project not correctly updated'})
+        }
+    }).catch (error =>
+        res.status(500).json({error: `Server error could not update data. Error: ${error}`})
+    )
+}); 
+
 projects.delete('/:id', validateProjectId, (req, res) => {
     // console.log(`id`, req.params.id)
     const id = req.params.id
@@ -61,20 +75,6 @@ projects.delete('/:id', validateProjectId, (req, res) => {
     res.status(500).json({error: `Server error, could not delete project. Error: ${error}`})
     )
 });
-
-projects.put('/:id', validateProjectId, (req, res) => {
-    const id = req.params.id
-    projectDB.update(id, req.body)
-    .then (updatedProject => {
-        if (updatedProject) {
-            res.status(200).json(updatedProject)
-        } else {
-            res.status(500).json({error: 'error project not correctly updated'})
-        }
-    }).catch (error =>
-        res.status(500).json({error: `Server error could not update data. Error: ${error}`})
-    )
-}); 
 
 function validateProjectId(req, res, next) {
     const id = req.params.id
