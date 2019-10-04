@@ -1,6 +1,6 @@
 const express = require('express');
 
-const projectData = require('../data/helpers/projectModel');
+const projectDB = require('../data/helpers/projectModel');
 
 const projects = express.Router();
 
@@ -53,7 +53,7 @@ const projects = express.Router();
 // });
 
 projects.get('/', (req, res) => {
-    projectData.get()
+    projectDB.get()
     .then(projects => {
         res.status(200).json(projects)
     }).catch(error => {
@@ -62,19 +62,13 @@ projects.get('/', (req, res) => {
     })
 });
   
-// projects.get('/:id', (req, res) => {
-// data.findById(req.params.id)
-// .then(post => {
-//     if (post.length === 0) {
-//     res.status(404).json({ message: "The post with the specified ID does not exist." });
-//     } else {
-//     res.status(200).json(post);
-//     }
-// })
-// .catch(error => {
-//     res.status(500).json({ error: "The post information could not be retrieved." });
-// });
-// });
+projects.get('/:id', validateUserId, (req, res) => {
+    projectDB.get(req.params.id).then(project => {
+            res.status(200).json(project)
+    }).catch(error =>
+        res.status(500).json({error: `Server error could not get data error: ${error}`})
+    )
+});
 
 // projects.get('/:id/comments', (req, res) => {
 //     data.findById(req.params.id)
@@ -142,5 +136,20 @@ projects.get('/', (req, res) => {
 //     } else {
 //         res.status(400).json({ Message: "Please provide title and contents for the post." })}
 // });
+
+function validateUserId(req, res, next) {
+    const id = req.params.id
+    console.log(id)
+    projectDB.get(id)
+    .then(project => {
+        if(project) {
+            next();
+        } else {
+            res.status(404).json({Messgae: "invalid user id"})
+        }
+    }).catch (error =>
+        res.status(500).json({error: `Server error: ${error}`})
+    )
+};
 
 module.exports = projects;
