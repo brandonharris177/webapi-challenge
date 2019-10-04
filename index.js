@@ -15,6 +15,7 @@ Go code!
 
 const express = require('express');
 const helmet = require('helmet')
+const defaults = require('./config/default')
 
 const projects = require('./Routes/Projects')
 const actions = require('./Routes/Actions')
@@ -30,9 +31,10 @@ server.use('/api/actions', actions);
 port = 5000
   
 // watch for connections on port 5000
-server.listen(port, () =>
-console.log(`Server running on http://localhost:${port}`)
-);
+server.listen(defaults.port, () => {
+    console.log(`\n*** Server Running on http://localhost${defaults.port} ***\n`);
+  });
+  
 
 server.get('/', (req, res) => {
     res.send('Its working from index');
