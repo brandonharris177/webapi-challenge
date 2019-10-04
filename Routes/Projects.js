@@ -49,7 +49,7 @@ projects.delete('/:id', validateProjectId, (req, res) => {
         // console.log (`project`, project)
         projectDB.remove(id)
         .then (responce => {
-            console.log(`responce`, responce)
+            // console.log(`responce`, responce)
             if (responce === 1) {
                 res.status(204).json({Message: 'project deleted'})
             } else {
@@ -61,6 +61,20 @@ projects.delete('/:id', validateProjectId, (req, res) => {
     res.status(500).json({error: `Server error, could not delete project. Error: ${error}`})
     )
 });
+
+projects.put('/:id', validateProjectId, (req, res) => {
+    const id = req.params.id
+    projectDB.update(id, req.body)
+    .then (updatedProject => {
+        if (updatedProject) {
+            res.status(200).json(updatedProject)
+        } else {
+            res.status(500).json({error: 'error project not correctly updated'})
+        }
+    }).catch (error =>
+        res.status(500).json({error: `Server error could not update data. Error: ${error}`})
+    )
+}); 
 
 function validateProjectId(req, res, next) {
     const id = req.params.id
