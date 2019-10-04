@@ -70,25 +70,15 @@ projects.get('/:id', validateUserId, (req, res) => {
     )
 });
 
-// projects.get('/:id/comments', (req, res) => {
-//     data.findById(req.params.id)
-//     .then(post => {
-//         console.log(`post`, post)
-//         if (post.length === 0) {
-//         res.status(404).json({ message: "The post with the specified ID does not exist." });
-//         } else {
-//         data.findPostComments(req.params.id)
-//         .then(comments => {
-//             console.log(req.params.id)
-//             console.log(`comments`, comments)
-//             res.status(200).json(comments)
-//         })
-//         }
-//     })
-//     .catch(error => {
-//         res.status(500).json({ error: "The post information could not be retrieved." });
-//     });
-// });
+projects.get('/:id/actions', validateUserId, (req, res) => {
+    const id = req.params.id
+    projectDB.getProjectActions(id)
+    .then(actions => {
+        res.status(200).json(actions)
+    }).catch(error =>
+        res.status(500).json({error: `Server Error ${error}`})
+    )
+});
 
 // projects.delete(`/:id`, (req, res) => {
 //     data.findById(req.params.id)
