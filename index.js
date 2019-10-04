@@ -12,3 +12,29 @@ I need this code, just don't know where, perhaps should make some middleware, do
 
 Go code!
 */
+
+require('dotenv').config()
+const express = require('express');
+const helmet = require('helmet')
+const defaults = require('./config/default')
+
+const projects = require('./Routes/Projects')
+const actions = require('./Routes/Actions')
+
+const server = express();
+
+server.use(express.json());
+
+server.use(helmet())
+server.use('/api/projects', projects);
+server.use('/api/actions', actions);
+  
+// watch for connections on port 5000
+server.listen(defaults.port, () => {
+    console.log(`\n*** Server Running on http://localhost${defaults.port} ***\n`);
+  });
+  
+
+server.get('/', (req, res) => {
+    res.send('Welcome to the projects API');
+  });

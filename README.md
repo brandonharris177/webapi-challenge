@@ -26,13 +26,24 @@ Demonstrate your understanding of this Sprint's concepts by answering the follow
 
 - [ ] Mention two parts of Express that you learned about this week.
 
+1) Express gives us access to things like middleware support for added functionality to our servers. 
+2) As a library Express helps us cut down on the amount of code needed to accomplish tasks in node. 
+
 - [ ] Describe Middleware?
+
+Middleware in node are functions that help to separate tasks and save on space by being invoked wherever a specific action needs to be accomplished such as checking an id.
 
 - [ ] Describe a Resource?
 
+Resources are data stored in an API and accessed through CRUD operations.
+
 - [ ] What can the API return to help clients know if a request was successful?
 
+The API can return a status and/or a response to the client to let them know what the result of the request is. The status of 200 (successful return) and 201 (created) are examples of successful returned statuses. 
+
 - [ ] How can we partition our application into sub-applications?
+
+We can divide the app by requests when the client makes a request to a particular api we can divide different parts of the app to handle different requests. (i.e. one for /api/requestforthis and one /api/requestforthat).
 
 ## Project Setup
 
