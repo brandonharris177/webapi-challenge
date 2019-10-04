@@ -4,24 +4,14 @@ const projectDB = require('../data/helpers/projectModel');
 
 const projects = express.Router();
 
-// projects.post('/', (req, res) => {
-//     const postData =  req.body
-//     // console.log(req.body)
-//     // console.log(`post Data`, postData
-//     if (req.body.title && req.body.contents) {
-//         // console.log(`title`, req.body.title)
-//     data.insert(postData)
-//     .then(id => data.findById(id.id))
-//     .then(newpost => {
-//         console.log(`new post`, newpost)
-//         res.status(201).json(newpost)
-//     }).catch(error => {
-//         res.status(500).json({error: "There was an error while saving the post to the database"})
-//     })
-//     } else {
-//     console.log(`got this far`)
-//     res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
-// }});
+projects.post('/', validateProject, (req, res) => {
+    projectDB.insert(req.body)
+    .then(newProject =>
+        res.status(201).json(newProject)
+    ).catch(error =>
+        res.status(500).json({error: `Server error could not create project error: ${error}`})
+    )
+});
 
 // projects.post('/:id/comments', (req, res) => {
 //     const id = req.params.id
@@ -58,11 +48,11 @@ projects.get('/', (req, res) => {
         res.status(200).json(projects)
     }).catch(error => {
         res.end()
-        res.status(500).json({ error: `The posts information could not be retrieved error: ${error}.` })
+        res.status(500).json({ error: `The project information could not be retrieved error: ${error}.` })
     })
 });
   
-projects.get('/:id', validateUserId, (req, res) => {
+projects.get('/:id', validateProjectId, (req, res) => {
     projectDB.get(req.params.id).then(project => {
             res.status(200).json(project)
     }).catch(error =>
@@ -70,7 +60,7 @@ projects.get('/:id', validateUserId, (req, res) => {
     )
 });
 
-projects.get('/:id/actions', validateUserId, (req, res) => {
+projects.get('/:id/actions', validateProjectId, (req, res) => {
     const id = req.params.id
     projectDB.getProjectActions(id)
     .then(actions => {
@@ -127,7 +117,7 @@ projects.get('/:id/actions', validateUserId, (req, res) => {
 //         res.status(400).json({ Message: "Please provide title and contents for the post." })}
 // });
 
-function validateUserId(req, res, next) {
+function validateProjectId(req, res, next) {
     const id = req.params.id
     console.log(id)
     projectDB.get(id)
@@ -135,11 +125,24 @@ function validateUserId(req, res, next) {
         if(project) {
             next();
         } else {
-            res.status(404).json({Messgae: "invalid user id"})
+            res.status(404).json({Messgae: "invalid project id"})
         }
     }).catch (error =>
         res.status(500).json({error: `Server error: ${error}`})
     )
+};
+
+function validateProject(req, res, next) {
+    if (req.body) {
+        if (req.body.name && req.body.description) {
+            next ();
+        } else {
+            res.status(400).json({ message: "missing required name or description field"  })
+        }
+    } else {
+        res.status(400).json({ message: "missing project data" })
+    }
+    
 };
 
 module.exports = projects;
