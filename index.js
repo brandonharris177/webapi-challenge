@@ -15,14 +15,13 @@ Go code!
 
 const express = require('express');
 
-// const data = require('./data/db');
-// const router = require('./Router/Router')
+const projects = require('./Routes/Projects')
 
 const server = express();
 
 server.use(express.json());
 
-// server.use('/api/posts', router);
+server.use('/api/projects', projects);
 
 port = 5000
   
